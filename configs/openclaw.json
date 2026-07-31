@@ -1,0 +1,44 @@
+{
+  "agents": {
+    "defaults": {
+      "model": {
+        "primary": "omniroute/auto"
+      }
+    }
+  },
+  "models": {
+    "providers": {
+      "omniroute": {
+        "baseUrl": "http://localhost:20128/v1",
+        "apiKey": "YOUR_OMNIROUTE_API_KEY",
+        "api": "openai-completions",
+        "models": [
+          {
+            "id": "auto",
+            "name": "OmniRoute Auto"
+          },
+          {
+            "id": "auto/coding",
+            "name": "OmniRoute Coding"
+          },
+          {
+            "id": "auto/cheap",
+            "name": "OmniRoute Cheap"
+          }
+        ]
+      }
+    }
+  },
+  "channels": {
+    "telegram": {
+      "enabled": true,
+      "botToken": "YOUR_TELEGRAM_BOT_TOKEN",
+      "dmPolicy": "pairing",
+      "groups": {
+        "*": {
+          "requireMention": true
+        }
+      }
+    }
+  }
+}
