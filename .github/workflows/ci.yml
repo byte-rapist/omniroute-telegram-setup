@@ -1,0 +1,46 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Validate JSON configs
+        run: |
+          echo "Validating configs/openclaw.json..."
+          python3 -c "import json; json.load(open('configs/openclaw.json'))"
+          echo "JSON is valid."
+
+      - name: Check required files exist
+        run: |
+          test -f README.md
+          test -f configs/openclaw.json
+          test -f configs/omniroute.env.example
+          test -f scripts/setup.sh
+          test -f docker-compose.yml
+          echo "All required files present."
+
+      - name: Make setup script executable check
+        run: |
+          # Just ensure the script is present and has a shebang
+          head -n 1 scripts/setup.sh | grep -q '#!/'
+          echo "setup.sh looks good."
+
+  # Example deploy job (disabled by default – enable when you have secrets)
+  # deploy:
+  #   needs: validate
+  #   if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v4
+  #     - name: Deploy example
+  #       run: echo "Add your deploy steps here (SSH, Docker, etc.)"
